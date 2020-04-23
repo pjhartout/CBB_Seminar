@@ -131,3 +131,6 @@ venv.bak/
 *.synctex.gz
 *.fdb_latexmk
 *.fls
+*.vrb
+*.snm
+*.nav
