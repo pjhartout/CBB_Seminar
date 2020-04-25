@@ -11,8 +11,8 @@
 \usepackage{xspace}
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
 
-\title{The emergence of geometric order in proliferating metazoan epithelia.}
-\subtitle{Gibson \emph{et al} - seminar}
+\title{The emergence of geometric order \\ in proliferating metazoan epithelia.}
+\subtitle{by Gibson \emph{et al} -- Computational Biology and Bioinformatics Seminar}
 \date{\today}
 \author{Philip Hartout}
 \institute{ETH Zurich}
@@ -43,7 +43,7 @@
 
 \begin{frame}[fragile]{Motivation}
 
-    \begin{aquote}{Gibson \emph{et al}}
+    \begin{aquote}{Gibson \emph{et al} \cite{gibson2006emergence}}
     The organisation of cells into epithelial sheets is an essential feature of animal design.
     \end{aquote}
 
@@ -62,7 +62,8 @@
             \begin{figure}
                 \centering
                 \includegraphics[width=.5\textwidth]{figures/honeycombs.png}
-            \end{figure}
+                \label{}
+        \end{figure}
     \end{columns}
     \vspace{12pt}
     \onslide<2->How is the geometry of \emph{growing} epithelial cells organized and how can it be explained? 
@@ -74,9 +75,9 @@
         \column{0.5\textwidth}
         Time-lapse movies collected revealed the following findings:
           \begin{itemize}
-            \item Initially polygonal prophase cells rounded up and divided
-            \item Cell-neighbour relationships were stably maintained throughout the cell cycle
-            \item The topology of the divided cells is invariant over time.
+            \onslide<2->\item Initially polygonal prophase cells rounded up and divided
+            \onslide<3->\item Cell-neighbour relationships were stably maintained throughout the cell cycle
+            \onslide<4->\item The topology of the divided cells is invariant over time.
           \end{itemize}
        
          
@@ -85,10 +86,12 @@
                 \centering
                 \includegraphics[width=.7\textwidth]{figures/supfig1.png}
                 \caption{General hexagon-dominated topology of growing epithelial in \emph{Drosophila Melanogaster}.}
-                
+                \label{}
             \end{figure}
     \end{columns}
 \end{frame}
+
+\section{Model Assumptions}
 
 \begin{frame}[fragile]{Post-mitotic relationship between two daughter cells}
   Stochastically marked cell lineages with GFP revealed stable post-mitotic patterns.     
@@ -98,16 +101,212 @@
       \centering
       \includegraphics[width=\textwidth]{figures/daughter-cell-relationship.png}
       \caption{Daugher-cell relationship.}
-      
+      \label{}
     \end{figure}
     \column{0.5\textwidth}
         \begin{figure}[b]
             \centering
             \includegraphics[width=.4\textwidth]{figures/post-mitotic-relationship.png}
-            \caption{Observed post-mitotic relationshipbetween daughter cells.}
-            
+            \caption{Observed post-mitotic relationship between daughter cells.}
+            \label{}
     \end{figure}
   \end{columns}  
+\end{frame}
+
+\section{A Discrete Markov Model for Proliferating Epithelia}
+
+\begin{frame}[fragile]{A discrete Markov model to model stochastic cell proliferation}
+  \begin{columns}
+    \column{\textwidth}
+    \begin{table}
+      \centering
+      \scalebox{.9}{
+      \begin{tabular}{ll}
+        $s$ & state of the cell as its number of sides, where $s>3$.\\  
+        $p_s$ & the relative frequency of $s$-sided cells in the population \\
+        $\mathbf{p}^{(t)}$ & the infinite row vector $\mathbf{p}^{(t)}=[p_4, p_5, p6,\ldots ]$ state of the population at generation $t$.\\
+        $\mathbf{p}^{(t+1)}=\mathbf{p}^{(t)}PS$ & the state dynamics, where $P$ and $S$ are the probabilistic transition matrices.\\
+        $P_{ij}$ & the probabilty that an $i$ sided cell divides to produce a $j$-sided daughter cell.\\
+        $S_{ij}$ & the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions\\
+        & to become $j$-sided. \\
+      \end{tabular}}
+    \end{table}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Derivation of Markov state dynamics - transition matrix $P$}
+  \centering
+  \begin{columns}[onlytextwidth]
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item $P_{ij}$: the probabilty that an $i$ sided cell divides to produce a $j$-sided daughter cell.
+      \item $K_t$: the number of junctions distributed to one daughter cell on division at generation $t$. $s_{t-1}-K_t$ are left for the other.
+      \onslide<2->\item Because no triangular cells are observed, each daughter receives at least two junctions, leaving $s_t-4$ junctions to be distributed among the daughters with equal probability.
+      \item So, the number of junctions received by the first daughter is $K_t-2\sim\mathcal{B}(n=s_{t-1}, p=\frac{1}{2})$. 
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \onslide<3->\item As a result $P_{ij}=P(K_t+2=j|s_{t-1}=i)={i-4 \choose j-4}\cdot\frac{1}{2^{i-4}}$
+      \onslide<4->\item Therefore, the unnormalized entries of $P$ are the coefficients of Pascal's triangle:
+      \renewcommand{\kbldelim}{(}% Left delimiter
+      \renewcommand{\kbrdelim}{)}% Right delimiter
+      \[
+        P = \kbordermatrix{
+          & 4 & 5 & 6 & 7 & 8 & 9 & \ldots\\
+          4 & 1 &  &  &  & & &  \\
+          5 & 1 & 1 & & & & &\\
+          6 & 1 & 2 & 1 & & & &\\
+          7 & 1 & 3 & 3 & 1 & & & \\
+          8 & 1 & 4 & 6 & 4 & 1 & &\\
+          9 & 1 & 5 & 10 & 10 & 5 & 1 & \\
+          \vdots & & & & & & & \ddots\\
+        }
+      \]
+    \end{itemize}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Derivation of Markov state dynamics - transition matrix $S$}
+  \centering
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+    \begin{itemize}
+      \item $S_{ij}$: the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions\\
+      \onslide<2-> \item On mitosis, a cell adds one side to each of two neighbouring cells. 
+      \onslide<3-> \item Assuming $N$ cells in an epithelium, the number of cells after one round of divisions is $2N$ 
+      \onslide<4->\item On average the number of sides gained per cell is $\frac{2N}{2N}=1$. That is, a cell will gain 1 side every cycle on average.
+      \onslide<5->\item Thus, $S_{ij}=1$ if $j=i+!$ and 0 otherwise.
+    \end{itemize}
+    \column{0.5\textwidth} 
+      \renewcommand{\kbldelim}{(}% Left delimiter
+      \renewcommand{\kbrdelim}{)}% Right delimiter
+      \[
+        S = \kbordermatrix{
+          & 4 & 5 & 6 & 7 & 8 & 9 & \ldots\\
+          4 & 0 & 1 &  &  & & &  \\
+          5 & & 0 & 1 & & & &\\
+          6 & & & 0 & 1 & & &\\
+          7 & & & & 0 & 1 & & \\
+          8 & & & & & 0 & 1 &\\
+          9 & & & & & & 0 & 1\\
+          \vdots & & & & & & & \ddots\\
+        }
+      \]    
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Predicting the equilibrium $E$ from $T=PS$}
+   The Perron-Frobenius theorem guarantees that a Markov chain will converge to a unique equilibrium $\mathbf{p*}$ where $\mathbf{p*}$ is the principal eigenvector of the transition matrix T.
+   \begin{figure}
+     \centering
+     \includegraphics[width=.47\textwidth]{figures/polygon_distribution_metazoa.png}  
+     \caption{Distribution of the predicted and observed polygons}
+   \end{figure} 
+\end{frame}
+
+\begin{frame}[fragile]{Robust equilibrium topology}
+  \begin{columns}[onlytextwidth]
+    \column{.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{figures/fig2a.png}
+      \caption{Discrete state dynamics}
+    \end{figure}
+    \column{.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{figures/fig2c.png}
+      \caption{Figure showing the same attained equilibirum, no matter the initial conditions}
+    \end{figure}
+  \end{columns}  
+\end{frame}
+
+\begin{frame}[fragile]{Additional insights on mitotic cells}
+  \begin{columns}[onlytextwidth]
+    \column{0.45\textwidth}
+    As seen in the construction of $S$, the average mitotic cell gains approximately one side, and daughter cells have one less side. Experimental evidence confirms this:
+    \begin{table}
+      \begin{tabular}{ll}
+        \toprule
+        \textbf{Non-mitotic cells} & ($5.94\pm 0.06$) \\
+        \textbf{Mitotic cells} & ($6.99\pm 0.07$) \\
+        \bottomrule 
+      \end{tabular}
+    \end{table}
+    \column{0.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{figures/fig3c.png}
+      \caption{Polygon distributions of mitotic cells vs. non-mitotic cells}
+      \label{}
+    \end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Polygon distribution of mitotic cells in non-proliferating tissues}
+  \begin{columns}[onlytextwidth]
+    \column{0.45\textwidth}
+    The polygon distribution of proliferating cells in a non-proliferating tissue is not the same as that in proliferating tissue. This is demonstrated by forcing mitosis (using a proten named \emph{string}, abbreviated \emph{stg}) in some cells in quiescent tissue.
+    \column{0.5\textwidth}
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{figures/fig3e.png}
+      \caption{Distribution of polygons in non-proliferating titsue}
+    \end{figure}
+  \end{columns}
+  $\rightarrow$ Differential proliferation influences cell shape and morphogenesis (not modelled here).
+\end{frame}
+
+\section{Subsequent work}
+
+\begin{frame}[fragile]{Subsequent work}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+    Work on 3D structures:
+    \begin{figure}
+      \centering
+      \includegraphics[width=.3\textwidth]{figures/scutoids.png}
+      \caption{The scutoid has been discovered as a solution to 3D cell packing.\cite{gomez2018scutoids}}
+    \end{figure}
+    \column{.5\textwidth}
+    Work on dynamics
+    \begin{figure}
+      \centering
+      \includegraphics[width=\textwidth]{figures/Cell_Dynamics.jpg}
+      \caption{Modelling and prediction of speed and direction of proliferating epithelia. \cite{aland2015mechanistic}}
+      \label{}
+    \end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Take home messages} 
+  The proposed \textbf{discrete Markov chain}:
+  \begin{enumerate}
+    \item shows how epithelial topology can be irregular, but \textbf{not random}.
+    \onslide<2->\item \textbf{explains the hexagonal topology} of growing epithelia
+    \onslide<3->\item predicts the \textbf{overall distribution} of polygonal cell types
+    \onslide<4->\item shows an \textbf{emergent mechanism} by which epithelia accomodate \textbf{rapid proliferation} while maintaining \textbf{structural integrity}. 
+    \onslide<5->\item Provides a \textbf{framework} for investigating other models for \textbf{cell division} such as \textbf{cleavage plane} choices or \textbf{aberrant cell division}.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}[standout]
+  Questions?
+\end{frame}
+
+\appendix
+
+\begin{frame}[fragile]{Backup slides - Assumptions of the recurrence system}
+  From the aforementioned observations observations we make the following assumptions about the mathematical modelling of cell epithelia: 
+  \begin{itemize}
+    \item Cells are polygons with a minimum of four sides
+    \item Cells do not resort
+    \item Mitotic siblings retain a common common junctional interface
+    \item Cells have asynchronous but uniform cell cycle times
+    \item Cleavage places cut a side rather than a vertex of the mother polygon
+    \item Mitotic cleavage orientation randomly distributes existing tricellular junctions to both daughter cells.
+  \end{itemize} 
 \end{frame}
 
 \begin{frame}[fragile]{Recurrence system}
@@ -117,7 +316,7 @@
     \centering
     \caption{Topology changes during cell division}
     \includegraphics[width=.5\textwidth]{figures/topology_evolution.png} 
-    
+    \label{}
   \end{figure}
   
   \begin{table}
@@ -146,185 +345,12 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}[fragile]{A discrete Markov model to model stochastic cell proliferation}
-  \begin{columns}
-    \column{\textwidth}
-    \begin{table}
-      \centering
-      \scalebox{.9}{
-      \begin{tabular}{ll}
-        $s$ & state of the cell as its number of sides, where $s>3$.\\  
-        $p_s$ & the relative frequency of $s$-sided cells in the population \\
-        $\mathbf{p}^{(t)}$ & the infinite row vector $\mathbf{p}^{(t)}=[p_4, p_5, p6,\ldots ]$ state of the population at generation $t$.\\
-        $\mathbf{p}^{(t+1)}=\mathbf{p}^{(t)}PS$ & the state dynamics, where $P$ and $S$ are the probabilistic transition matrices.\\
-        $P_{ij}$ & the probabilty that an $i$ sided cell divides to produce a $j$-sided daughter cell.\\
-        $S_{ij}$ & the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions\\
-        & to become $j$-sided. \\
-      \end{tabular}}
-    \end{table}
-  \end{columns}
-\end{frame}
 
-\begin{frame}[fragile]{Derivation of Markov state dynamics - transition matrix $P$}
-  \centering
-  \begin{columns}[onlytextwidth]
-    \column{0.5\textwidth}
-    \begin{itemize}
-      \item $P_{ij}$: the probabilty that an $i$ sided cell divides to produce a $j$-sided daughter cell.
-      \item $K_t$: the number of junctions distributed to one daughter cell on division at generation $t$. $s_{t-1}-K_t$ are left for the other.
-      \item Because no triangular cells are observed, each daughter receives at least two junctions, leaving $s_t-4$ junctions to be distributed among the daughters with equal probability.
-      \item So, the number of junctions received by the first daughter is $K_t-2\sim\mathcal{B}(n=s_{t-1}, p=\frac{1}{2})$. 
-    \end{itemize}
-    \column{0.5\textwidth}
-    \begin{itemize}
-      \item As a result $P_{ij}=P(K_t+2=j|s_{t-1}=i)={i-4 \choose j-4}\cdot\frac{1}{2^{i-4}}$
-      \item Therefore, the unnormalized entries of $P$ are the coefficients of Pascal's triangle:
-      \renewcommand{\kbldelim}{(}% Left delimiter
-      \renewcommand{\kbrdelim}{)}% Right delimiter
-      \[
-        P = \kbordermatrix{
-          & 4 & 5 & 6 & 7 & 8 & 9 & \ldots\\
-          4 & 1 &  &  &  & & &  \\
-          5 & 1 & 1 & & & & &\\
-          6 & 1 & 2 & 1 & & & &\\
-          7 & 1 & 3 & 3 & 1 & & & \\
-          8 & 1 & 4 & 6 & 4 & 1 & &\\
-          9 & 1 & 5 & 10 & 10 & 5 & 1 & \\
-          \vdots & & & & & & & \ddots\\
-        }
-      \]
-    \end{itemize}
-  \end{columns}
-\end{frame}
+\begin{frame}[allowframebreaks]{References}
 
+  \bibliography{References}
+  \bibliographystyle{abbrv}
 
-\begin{frame}[fragile]{Derivation of Markov state dynamics - transition matrix $S$}
-  \centering
-  \begin{columns}[T,onlytextwidth]
-    \column{0.5\textwidth}
-    \begin{itemize}
-      \item $S_{ij}$: the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions\\
-      \item On mitosis, a cell adds one side to each of two neighbouring cells. 
-      \item Assuming $N$ cells in an epithelium, the number of cells after one round of divisions is $2N$ 
-      \item On average the number of sides gained per cell is $\frac{2N}{2N}=1$. That is, a cell will gain 1 side every cycle on average.
-      \item Thus, $S_{ij}=1$ if $j=i+!$ and 0 otherwise.
-    \end{itemize}
-    \column{0.5\textwidth}
-    \begin{itemize} 
-      \renewcommand{\kbldelim}{(}% Left delimiter
-      \renewcommand{\kbrdelim}{)}% Right delimiter
-      \[
-        S = \kbordermatrix{
-          & 4 & 5 & 6 & 7 & 8 & 9 & \ldots\\
-          4 & 0 & 1 &  &  & & &  \\
-          5 & & 0 & 1 & & & &\\
-          6 & & & 0 & 1 & & &\\
-          7 & & & & 0 & 1 & & \\
-          8 & & & & & 0 & 1 &\\
-          9 & & & & & & 0 & 1\\
-          \vdots & & & & & & & \ddots\\
-        }
-      \]
-    \end{itemize}
-    
-  \end{columns}
-\end{frame}
-
-% \begin{frame}[fragile]{Robust equilibrium topology}
-%   \begin{figure}
-%     \centering
-%     \includegraphics[width=.25\textwidth]{figures/fig2a.png}
-%     \caption{Discrete state dynamics}
-%     
-%   \end{figure}
-%   \begin{figure}
-%     \centering
-%     \includegraphics[width=.5\textwidth]{figures/fig2c.png}
-%     \caption{Figure showing the same attained equilibirum, no matter the initial conditions}
-%     
-%   \end{figure}
-% \end{frame}
-
-\begin{frame}[fragile]{Predicting the equilibrium $E$ from $T=PS$}
-   The Perron-Frobenius theorem guarantees that a Markov chain will converge to a unique equilibrium $\mathbf{p*}$ where $\mathbf{p*}$ is the principal eigenvector of the transition matrix T.
-   \begin{figure}
-     \centering
-     \includegraphics[width=.47\textwidth]{figures/polygon_distribution_metazoa.png}
-     \caption{Distribution of the predicted and observed polygons}
-   \end{figure} 
-\end{frame}
-
-\begin{frame}[fragile]{Additional insights on mitotic cells}
-  \begin{columns}[onlytextwidth]
-    \column{0.45\textwidth}
-    As seen in the construction of $S$, the average mitotic cell gains approximately one side, and daughter cells have one less side. Experimental evidence confirms this:
-    \begin{table}
-      \begin{tabular}{ll}
-        \toprule
-        \textbf{Non-mitotic cells} & ($5.94\pm 0.06$) \\
-        \textbf{Mitotic cells} & ($6.99\pm 0.07$) \\
-        \bottomrule 
-      \end{tabular}
-    \end{table}
-    \column{0.5\textwidth}
-    \begin{figure}
-      \centering
-      \includegraphics[width=\textwidth]{figures/fig3c.png}
-      \caption{Polygon distributions of mitotic cells vs. non-mitotic cells}
-    \end{figure}
-  \end{columns}
-\end{frame}
-
-\begin{frame}[fragile]{Polygon distribution of mitotic cells in non-proliferating tissues}
-  \begin{columns}[onlytextwidth]
-    \column{0.45\textwidth}
-    The polygon distribution of proliferating cells in a non-proliferating tissue is not the same as that in proliferating tissue. This is demonstrated by forcing mitosis (using a proten named \emph{string}, abbreviated \emph{stg}) in some cells in quiescent tissue.
-    \column{0.5\textwidth}
-    \begin{figure}
-      \centering
-      \includegraphics[width=\textwidth]{figures/fig3e.png}
-      \caption{Distribution of polygons in non-proliferating titsue}
-    \end{figure}
-  \end{columns}
-  $\rightarrow$ Differential proliferation influences cell shape and morphogenesis (not modelled here).
-\end{frame}
-
-% \begin{frame}[fragile]{Subsequent work}
-%   This article is from 2006, since then:
-%   \begin{columns}
-%     \column{0.5\textwidth}
-%     Work on 3D structures:
-%     \begin{figure}
-%       \centering
-%       \includegraphics[]{figures/scutoids.png}
-%       \caption{The scutoid has been discovered as a solution to 3D cell packing}
-%       
-%     \end{figure}
-%   \end{columns}
-% \end{frame}
-
-% \begin{frame}[fragile]{Take home messages} 
-%   \begin{itemize}
-%     \item TAKE HOME
-%   \end{itemize}
-% \end{frame}
-
-\begin{frame}[standout]
-  Questions?
-\end{frame}
-
-\appendix
-
-\begin{frame}[fragile]{Backup slides - Assumptions of the recurrence system}
-  From the aforementioned observations observations we make the following assumptions about the mathematical modelling of cell epithelia: 
-  \begin{itemize}
-    \item Cells are polygons with a minimum of four sides
-    \item Cells do not resort
-    \item Mitotic siblings retain a common common junctional interface
-    \item Cells have asynchronous but uniform cell cycle times
-    \item Cleavage places cut a side rather than a vertex of the mother polygon
-    \item Mitotic cleavage orientation randomly distributes existing tricellular junctions to both daughter cells.
-  \end{itemize} 
 \end{frame}
 
 
