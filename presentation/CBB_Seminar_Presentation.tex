@@ -1,7 +1,8 @@
+%Metroplolis Beamer Theme: https://github.com/matze/mtheme
 \documentclass[aspectratio=169, 10pt]{beamer}
 
 \usetheme{metropolis}
-\usepackage{appendixnumberbeamer, lmodern, bookmark, kbordermatrix}
+\usepackage{appendixnumberbeamer, lmodern, bookmark, kbordermatrix,fontawesome}
 \usepackage{booktabs}
 \usepackage[scale=2]{ccicons}
 
@@ -12,7 +13,7 @@
 \newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
 
 \title{The emergence of geometric order \\ in proliferating metazoan epithelia.}
-\subtitle{by Gibson \emph{et al} \textit{Nature}, 2006 -- Computational Biology and Bioinformatics Seminar}
+\subtitle{by Gibson \emph{et al}. \textit{Nature}, 2006 \\Computational Biology and Bioinformatics Seminar}
 \date{\today}
 \author{Philip Hartout}
 \institute{ETH Zurich} 
@@ -63,7 +64,7 @@
                 \centering
                 \includegraphics[width=.5\textwidth]{figures/honeycombs.png}
                 \label{}
-        \end{figure}
+            \end{figure}
     \end{columns}
     \vspace{12pt}
     \onslide<2->How is the geometry of \emph{growing} epithelial cells organized and how can it be explained? 
@@ -130,14 +131,13 @@
     \begin{table}
       \centering
       \scalebox{.9}{
-      \begin{tabular}{ll}
+      \begin{tabular}{lp{12.5cm}}
         $s$ & state of the cell as its number of sides, where $s>3$.\\  
         $p_s$ & the relative frequency of $s$-sided cells in the population \\
         $\mathbf{p}^{(t)}$ & the infinite row vector $\mathbf{p}^{(t)}=[p_4, p_5, p_6,\ldots ]$ state of the population at generation $t$.\\
         $\mathbf{p}^{(t+1)}=\mathbf{p}^{(t)}PS$ & the state dynamics, where $P$ and $S$ are the probabilistic transition matrices.\\
-        $P_{ij}$ & the probabilty that an $i$ sided cell divides to produce a $j$-sided daughter cell.\\
-        $S_{ij}$ & the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions\\
-        & to become $j$-sided. \\
+        $P_{ij}$ & the probability that an $i$ sided cell divides to produce a $j$-sided daughter cell.\\
+        $S_{ij}$ & the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions to become $j$-sided. \\
       \end{tabular}}
     \end{table}
   \end{columns}
@@ -228,6 +228,7 @@
       \label{}
     \end{figure}
   \end{columns}
+  $\rightarrow$ cells accumulate sides until division.
 \end{frame}
 
 \begin{frame}[fragile]{Polygon distribution of mitotic cells in non-proliferating tissues}
@@ -266,19 +267,21 @@
   \end{columns}
 \end{frame}
 
+\section{Conclusions}
+
 \begin{frame}[fragile]{Take home messages} 
   The proposed \textbf{discrete Markov chain}:
   \begin{enumerate}
     \item shows how epithelial topology can be irregular, but \textbf{not random}.
-    \onslide<2->\item \textbf{explains the hexagonal topology} of growing epithelia
-    \onslide<3->\item predicts the \textbf{overall distribution} of polygonal cell types
-    \onslide<4->\item shows an \textbf{emergent mechanism} by which epithelia accomodate \textbf{rapid proliferation} while maintaining \textbf{structural integrity}. 
-    \onslide<5->\item Provides a \textbf{framework} for investigating other models for \textbf{cell division} such as \textbf{cleavage plane} choices or \textbf{aberrant cell division}.
+    \onslide<2->\item \textbf{explains the predominantly hexagonal topology} of growing epithelia as well as the distribution of other polygons.
+    \onslide<3->\item shows an \textbf{emergent mechanism} by which epithelia accomodate \textbf{rapid proliferation} while maintaining \textbf{structural integrity}.
   \end{enumerate}
 \end{frame}
 
 \begin{frame}[standout]
   Questions?
+  \vspace{3cm}
+  \begin{center}{\Large \faicon{github}} \normalsize\url{https://github.com/pjhartout/CBB_Seminar}\end{center}
 \end{frame}
 
 \appendix
@@ -408,7 +411,6 @@
   \end{equation*} 
 \end{columns}
 \end{frame}
-
 
 \begin{frame}[allowframebreaks]{References}
   
