@@ -4,6 +4,7 @@
 \usetheme{metropolis}
 \usepackage{appendixnumberbeamer, lmodern, bookmark, kbordermatrix,fontawesome}
 \usepackage{booktabs}
+% \usepackage[sorting=none]{biblatex}
 \usepackage[scale=2]{ccicons}
 
 \usepackage{pgfplots}
@@ -71,15 +72,12 @@
 \end{frame}
 
 \begin{frame}[fragile]{Emergent behaviour}  
-  \begin{alertblock}{Emergent behaviour}
-    \vspace{5pt}
-    It is the behaviour of a system that can \emph{only} be explained by examination of a system's \textbf{parts} \emph{and} their \textbf{relationships}.
-  \end{alertblock}
-  Here, it can be applied to growing epithelia.
-  
+    Understanding emergent behaviours is required to model geometries of growing epithelial cells.
+    \onslide<2->\begin{alertblock}{Emergent behaviour}
+        \vspace{5pt}
+        It is the behaviour of a system that can \emph{only} be explained by examination of a system's \textbf{parts} \emph{and} their \textbf{relationships}.
+    \end{alertblock}
 \end{frame}
-
-
 
 \section{Model Assumptions}
 
@@ -101,6 +99,7 @@
             \label{}
     \end{figure}
   \end{columns}  
+  \onslide<2->$\rightarrow$ required to model relationships between cells
 \end{frame}
 
 \begin{frame}[fragile]{Typical topology changes of a dividing cell}
@@ -121,11 +120,11 @@
     \end{equation*}
     where $X_t$ is the time-dependent r.v. describing the state of the system at time $t$. 
     
-    It is determined by a probability transition matrix $P$ and an initial probability distribution $x$ where $x_i=P(X_0=i)$. 
+    It is determined by a probability transition matrix $P$ and an initial probability distribution. 
 
 \end{frame}
 
-\begin{frame}[fragile]{Applying a discrete M.M. to growing epethelia}
+\begin{frame}[fragile]{Applying a discrete M.M. to growing epithelia}
   \begin{columns}
     \column{\textwidth}
     \begin{table}
@@ -133,11 +132,11 @@
       \scalebox{.9}{
       \begin{tabular}{lp{12.5cm}}
         $s$ & state of the cell as its number of sides, where $s>3$.\\  
-        $p_s$ & the relative frequency of $s$-sided cells in the population \\
-        $\mathbf{p}^{(t)}$ & the infinite row vector $\mathbf{p}^{(t)}=[p_4, p_5, p_6,\ldots ]$ state of the population at generation $t$.\\
-        $\mathbf{p}^{(t+1)}=\mathbf{p}^{(t)}PS$ & the state dynamics, where $P$ and $S$ are the probabilistic transition matrices.\\
-        $P_{ij}$ & the probability that an $i$ sided cell divides to produce a $j$-sided daughter cell.\\
-        $S_{ij}$ & the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions to become $j$-sided. \\
+        \onslide<2->$p_s$ & the relative frequency of $s$-sided cells in the population \\
+        \onslide<3->$\mathbf{p}^{(t)}$ & the infinite row vector $\mathbf{p}^{(t)}=[p_4, p_5, p_6,\ldots ]$ state of the population at generation $t$.\\
+        \onslide<4->$\mathbf{p}^{(t+1)}=\mathbf{p}^{(t)}PS$ & the state dynamics, where $P$ and $S$ are the probabilistic transition matrices.\\
+        \onslide<5->$P_{ij}$ & the probability that an $i$ sided cell divides to produce a $j$-sided daughter cell.\\
+        \onslide<6->$S_{ij}$ & the probability of an $i$-sided cell will gain sides from dividing neighbour cells divisions to become $j$-sided. \\
       \end{tabular}}
     \end{table}
   \end{columns}
@@ -234,12 +233,12 @@
 \begin{frame}[fragile]{Polygon distribution of mitotic cells in non-proliferating tissues}
   \begin{columns}[onlytextwidth]
     \column{0.45\textwidth}
-    The polygon distribution of proliferating cells in a non-proliferating tissue is not the same as that in proliferating tissue. This is demonstrated by forcing mitosis (using a proten named \emph{string}, abbreviated \emph{stg}) in some cells in quiescent tissue.
+    The polygon distribution of proliferating cells in a non-proliferating tissue is not the same as that in proliferating tissue. This is demonstrated by forcing mitosis (using a protein named \emph{string}, abbreviated \emph{stg}) in some cells in quiescent tissue.
     \column{0.5\textwidth}
     \begin{figure}
       \centering
       \includegraphics[width=\textwidth]{figures/fig3e.png}
-      \caption{Distribution of polygons in non-proliferating titsue}
+      \caption{Distribution of polygons in non-proliferating tissue}
     \end{figure}
   \end{columns}
   $\rightarrow$ Differential proliferation influences cell shape and morphogenesis (not modelled here).
@@ -250,7 +249,7 @@
 \begin{frame}[fragile]{Subsequent work}
   \begin{columns}[T,onlytextwidth]
     \column{0.5\textwidth}
-    Work on 3D structures:
+    Work on 3D structures
     \begin{figure}
       \centering
       \includegraphics[width=.3\textwidth]{figures/scutoids.png}
@@ -414,7 +413,7 @@
 
 \begin{frame}[allowframebreaks]{References}
   
-  \bibliographystyle{abbrv}
+  \bibliographystyle{unsrt}
   \bibliography{References}
 
 \end{frame}
