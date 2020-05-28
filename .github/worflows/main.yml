@@ -7,11 +7,11 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v1
       - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@master
+        uses: xu-cheng/latex-action@v2
         with:
           args: -force
           root_file: CBB_Seminar_Presentation.tex
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact
         with:
           name: pdf
           path: CBB_Seminar_Presentation.pdf
