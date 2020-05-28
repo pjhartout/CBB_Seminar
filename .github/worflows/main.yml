@@ -9,7 +9,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@master
         with:
-          args: -f
+          args: -force
           root_file: CBB_Seminar_Presentation.tex
       - uses: actions/upload-artifact@v1
         with:
